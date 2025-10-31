@@ -13,7 +13,7 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
 
   // API key for NewsAPI (you should replace this with your own key)
-  const API_KEY = 'YOUR_API_KEY_HERE';
+  const API_KEY = '0bbb70343c7c435b9789c2af8e5f8c23';
   const BASE_URL = 'https://newsapi.org/v2';
 
   const fetchNews = useCallback(async () => {
