@@ -15,13 +15,15 @@ function App() {
   // API key for NewsAPI (you should replace this with your own key)
   const API_KEY = '0bbb70343c7c435b9789c2af8e5f8c23';
   const BASE_URL = 'https://newsapi.org/v2';
+  const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 
   const fetchNews = useCallback(async () => {
     setLoading(true);
     setError(null);
     
     try {
-      const url = `${BASE_URL}/top-headlines?category=${selectedCategory}&apiKey=${API_KEY}`;
+      const encodedUrl = encodeURIComponent(`${BASE_URL}/top-headlines?category=${selectedCategory}&apiKey=${API_KEY}`);
+      const url = `${CORS_PROXY}${encodedUrl}`;
       const response = await fetch(url);
       
       if (!response.ok) {
@@ -30,13 +32,14 @@ function App() {
       
       const data = await response.json();
       setArticles(data.articles || []);
+      console.log('API Response:', data);
     } catch (err) {
       setError(err.message);
       console.error('Error fetching news:', err);
     } finally {
       setLoading(false);
     }
-  }, [selectedCategory, API_KEY, BASE_URL]);
+  }, [selectedCategory, API_KEY, BASE_URL, CORS_PROXY]);
 
   useEffect(() => {
     // Check for saved theme preference
@@ -74,7 +77,8 @@ function App() {
     setError(null);
     
     try {
-      const url = `${BASE_URL}/everything?q=${encodeURIComponent(query)}&apiKey=${API_KEY}`;
+      const encodedUrl = encodeURIComponent(`${BASE_URL}/everything?q=${encodeURIComponent(query)}&apiKey=${API_KEY}`);
+      const url = `${CORS_PROXY}${encodedUrl}`;
       const response = await fetch(url);
       
       if (!response.ok) {
@@ -83,13 +87,14 @@ function App() {
       
       const data = await response.json();
       setArticles(data.articles || []);
+      console.log('Search API Response:', data);
     } catch (err) {
       setError(err.message);
       console.error('Error searching news:', err);
     } finally {
       setLoading(false);
     }
-  }, [fetchNews, API_KEY, BASE_URL]);
+  }, [fetchNews, API_KEY, BASE_URL, CORS_PROXY]);
 
   const handleCategoryChange = useCallback((category) => {
     setSelectedCategory(category);
